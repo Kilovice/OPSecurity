@@ -1,0 +1,45 @@
+config:
+
+# CONFIGURE BEFORE SETTING ENABLED TO TRUE!
+  enabled: false
+  
+# Checks if the player is Opped
+  check-op: true
+  
+# Enable for checking for specific permissions
+  check-perms: true
+  
+# Permissions Looked for
+  perm-list:
+  - 'worldedit.*'
+  
+# Players who bypass checks
+  white-list:
+  - 'ThisPlayer'
+  
+# Ban non-white-listed player?
+  ban: true
+  
+# Ban IP of non-white-listed player?
+  ban-ip: true
+
+# Message Player Receives on Kick.
+  kick-msg: 'Excessive Permissions!'
+    
+# Commands sent when player is banned (Sent By Console)
+  commands:
+  - 'eco reset %player%'
+  
+# Message Sent to Users with Permission: 'opsecurity.viewbroadcast'
+  perm-msg: 
+  - '&6Special Message Here'
+  
+# Message Sent to All Players
+  bc-msg: 
+  - '&c%player% has been banned!'
+  
+# Delay Before Timer Starts (In-Ticks 20 = 1 Second)
+  timer-delay: 0
+
+# Delay Between Checks (In-Ticks 20 = 1 Second)
+  timer-interval: 10
