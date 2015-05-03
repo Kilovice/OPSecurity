@@ -1,0 +1,4 @@
+name: OPSecurity
+main: dev.kilovice.opsecurity.main.OPSecurity
+version: 0.0.1
+author: Kilovice
