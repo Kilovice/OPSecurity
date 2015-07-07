@@ -1,6 +1,6 @@
 package dev.kilovice.opsecurity.main;
 
-import org.bukkit.Bukkit;
+import org.bukkit.Bukkit; 
 import org.bukkit.entity.Player;
 
 public class OPScheduler implements Runnable{
@@ -11,10 +11,7 @@ public class OPScheduler implements Runnable{
 	public void run() {
 		for(Player player : Bukkit.getOnlinePlayers())
 		{
-			if(OPConfig.whitelist.contains(player.getName()))
-			{
-			return;
-			}
+			if(!OPConfig.whitelist.contains(player.getName()))
 			if(OPConfig.checkOP){
 				if(player.isOp())
 				{
