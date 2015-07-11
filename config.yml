@@ -2,6 +2,15 @@ config:
 
 # CONFIGURE BEFORE SETTING ENABLED TO TRUE!
   enabled: false
+
+# Opt-Out of Metrics?
+  metrics: false
+  
+# Log extra Information?
+  debug: false
+
+# Check for Updates?
+  update-check: true
   
 # Checks if the player is Opped
   check-op: true
