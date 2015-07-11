@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import dev.kilovice.opsecurity.main.OPConfig;
 import dev.kilovice.opsecurity.main.OPConfigException;
+import dev.kilovice.opsecurity.main.OPDebug;
 import dev.kilovice.opsecurity.main.OPMessages;
 import dev.kilovice.opsecurity.main.OPSecurity;
 
@@ -16,8 +17,7 @@ public class OPPlayerCommandPreprocessEvent implements Listener{
 
 	@EventHandler
 	public void onCmd(PlayerCommandPreprocessEvent e){
-		
-		
+		OPDebug.log(this.getClass(), "Event Fired.");
 		String rawcmd = e.getMessage();
 		
 		String[] cmd = e.getMessage().split(" ");
@@ -34,16 +34,20 @@ public class OPPlayerCommandPreprocessEvent implements Listener{
 		e.setCancelled(true);	
 		if(s.equalsIgnoreCase("player") || s.equalsIgnoreCase("global"))
 			{
+			OPDebug.log(this.getClass(), "Checking Password Type . . .");
 				switch(s.toLowerCase())
 				{
 				case "player":
+					OPDebug.log(this.getClass(), "Password type: 'Player'");
 					p.sendMessage(ChatColor.translateAlternateColorCodes('&', OPMessages.rqtppw));
 					break;
 					
 				case "global":
+					OPDebug.log(this.getClass(), "Password type: 'Global'");
 					p.sendMessage(ChatColor.translateAlternateColorCodes('&', OPMessages.rqtgpw));
 					break;
 				}
+				OPDebug.log(this.getClass(), "Saving Command to Map");
 				OPSecurity.pw.add(p.getName());
 				OPSecurity.tempcmd.put(p.getName(), rawcmd);
 			}
