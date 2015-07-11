@@ -1,10 +1,35 @@
 package dev.kilovice.opsecurity.main;
 
-import org.bukkit.Bukkit;
-
 public class OPDebug {
 
-	public static void bc(String classname, int i){
-		Bukkit.broadcastMessage(classname + " " + i);
+	public static void log(Class<?> classname, String s){
+		if(OPSecurity.getInstance().getConfig() == null)
+		{
+			return;
+		}
+		if(!OPConfig.checkNull("config.debug"))
+		{
+		if(OPConfig.debug)
+		{
+		OPSecurity.log.info(classname.getSimpleName() + ": " + s);
+	}
+		}
+		else
+		{
+			
+		}
+	}
+	public static void log(String s1, String s){
+		if(OPSecurity.getInstance().getConfig() == null)
+		{
+			return;
+		}
+		if(!OPConfig.checkNull("config.debug"))
+		{
+		if(OPConfig.debug)
+		{
+		OPSecurity.log.info(s1 + ": " + s);
+	}
+		}
 	}
 }
