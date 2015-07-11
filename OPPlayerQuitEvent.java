@@ -5,6 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import dev.kilovice.opsecurity.main.OPDebug;
 import dev.kilovice.opsecurity.main.OPSecurity;
 
 public class OPPlayerQuitEvent implements Listener{
@@ -12,6 +13,7 @@ public class OPPlayerQuitEvent implements Listener{
 	@EventHandler
 	public void onQuit(PlayerQuitEvent e)
 	{
+		OPDebug.log(this.getClass(), "Event Fired.");
 		Player p = e.getPlayer();
 		if(OPSecurity.pw.contains(p.getName()))
 		{
