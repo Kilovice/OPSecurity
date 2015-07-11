@@ -1,6 +1,7 @@
 package dev.kilovice.opsecurity.main;
 
-import java.io.File; 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +13,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import dev.kilovice.mcstats.Metrics;
 
 import dev.kilovice.opsecurity.listeners.OPAsyncChatEvent;
 import dev.kilovice.opsecurity.listeners.OPPlayerCommandPreprocessEvent;
@@ -28,25 +30,45 @@ public class OPSecurity extends JavaPlugin{
 	
 	@Override
 	public void onEnable(){
-		pw = new ArrayList<String>();
-		tempcmd = new HashMap<String, String>();
 		plugin = this;
 		saveDefaultConfig();
 		config = this.getConfig();
+		checkUpdate();
+		pw = new ArrayList<String>();
+		tempcmd = new HashMap<String, String>();
 		registerMessages();
+		OPDebug.log(this.getClass(), "Registering Events . . .");
 		registerEvents(this, new OPAsyncChatEvent(), new OPPlayerCommandPreprocessEvent(), new OPPlayerQuitEvent());
+		OPDebug.log(this.getClass(), "Checking if Plugin is Enabled . . .");
 		if(OPConfig.enabled)
 		{
+			OPDebug.log(this.getClass(), "OPSecurity is Enabled!");
+			OPDebug.log(this.getClass(), "Starting Scheduler.");
 			OPScheduler.start();
+			
+			if(!OPConfig.checkNull("config.metrics"))
+			{
+				OPDebug.log(this.getClass(), "Checking if Metrics is Enabled . . .");
+				if(!OPConfig.metrics)
+				{
+					OPDebug.log(this.getClass(), "Metrics is Enabled!");
+				metricsStart();
+				}
+				else
+				{
+				OPDebug.log(this.getClass(), "Metrics is Disabled!");	
+				}
+			}
 		}
 		else{
+			OPDebug.log(this.getClass(), "OPSecurity is Disabled!");
 			log.severe("YOU MUST CONFIGURE THEN ENABLE THIS PLUGIN IN IT'S CONFIG FILE!");
 			Bukkit.getServer().getPluginManager().disablePlugin(this);
 		}
 	}
 	
 	@Override
-	public void onDisable(){
+	public void onDisable(){ 
 		plugin = null;
 	}
 	
@@ -57,6 +79,7 @@ public class OPSecurity extends JavaPlugin{
 	   public static void registerEvents(Plugin plugin, Listener... listeners) { 
 	        for (Listener listener : listeners) {
 	            Bukkit.getServer().getPluginManager().registerEvents(listener, plugin);
+	            OPDebug.log("OPSecurity", "Registering Event: '" + listener.getClass().getSimpleName() + "'");
 	        }
 	    }
 	   public static void registerMessages()
@@ -81,5 +104,33 @@ public class OPSecurity extends JavaPlugin{
 			{
 				e.printStackTrace();
 			}
+	   }
+	   public static synchronized void metricsStart()
+	   {
+		   try {
+		        Metrics metrics = new Metrics(OPSecurity.getInstance());
+		        metrics.start();
+		        metrics.enable();
+		    } catch (IOException e) {
+		    }
+	   }
+	   protected synchronized void checkUpdate()
+	   {
+		   if(!OPConfig.checkNull("config.update-check"))
+		   {
+			if(OPConfig.updater)
+			{
+			OPUpdater o = new OPUpdater(this);
+			o.checkForUpdate();
+			log.info("Current Version Found: '" + this.getDescription().getVersion() + "'");
+			log.info("Latest Version Found: '" + o.getLatestVersion() + "'");
+		    if(o.updateAvailable())
+		    {
+		    	log.warning("#############################################################");
+		    	log.warning("New Version of OPSecurity Available: '"+ o.getLatestVersion() + "'");
+		    	log.warning("#############################################################");
+		    }
+			}
+		   }
 	   }
 }
