@@ -1,6 +1,6 @@
 package dev.kilovice.opsecurity.main;
 
-import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.ChatColor; 
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -23,41 +23,40 @@ public class OPBanEvent extends Event implements Cancellable{
 		}
 		OPDebug.log(this.getClass(), "Event not Cancelled.");
 		if(!OPConfig.checkNull("config.commands")){
-			for(String command : OPConfig.cmdList){
+			for(String command : OPConfig.COMMAND_LIST){
 				String cmd = command.replace("%player%", player.getName());
 				Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), cmd);
 			}
 		}
 		
 		if(!OPConfig.checkNull("config.perm-msg")){
-			for(String msg : OPConfig.permMsgList){
+			for(String msg : OPConfig.PERMISSION_MESSAGE_LIST){
 				for(Player all : Bukkit.getOnlinePlayers()){
 					if(all.hasPermission(OPPermissions.VIEW_BROADCAST))
-					all.sendMessage(ChatColor.translateAlternateColorCodes('&', msg.replace("%player%", player.getName())));
+					all.sendMessage(OPUtils.parseString(OPMessages.BROADCAST_PERMISSION_MESSAGE, player));
 				}
 		}
 		if(!OPConfig.checkNull("config.bc-msg")){
-			for(String msg : OPConfig.bcMsgList){
+			for(String msg : OPConfig.BROADCAST_MESSAGE_LIST){
 				for(Player all : Bukkit.getOnlinePlayers()){
-					all.sendMessage(ChatColor.translateAlternateColorCodes('&', msg.replace("%player%", player.getName())));
+					all.sendMessage(OPUtils.parseString(OPMessages.BROADCAST_MESSAGE, player));
 				}
 			}
 		}
 		if(!OPConfig.checkNull("config.ban")){
-			if(OPConfig.player_nameban){
+			if(OPConfig.PLAYER_BAN_NAME){
 				player.setBanned(true);
-				if(!OPConfig.checkNull("config.kick-msg")){
-					player.kickPlayer(ChatColor.translateAlternateColorCodes('&', OPConfig.kickMsg.replace("%player%", player.getName())));
-				}
+					player.kickPlayer(OPUtils.parseString(OPMessages.KICK_MESSAGE, player));
+				
 			}
 		}
 		if(!OPConfig.checkNull("config.ban-ip")){
-			if(OPConfig.player_ipBan){
+			if(OPConfig.PLAYER_BAN_IP){
 				Bukkit.getServer().banIP(player.getAddress().getAddress().getHostAddress());
 			}
 		}
 		if(!OPConfig.checkNull("config.de-op")){
-		   if(OPConfig.player_deop){
+		   if(OPConfig.DEOP_PLAYER){
 			   player.setOp(false);
 		   }
 		}
@@ -81,5 +80,4 @@ public class OPBanEvent extends Event implements Cancellable{
 	public void setCancelled(boolean cancel) {
 		cancelled = cancel;
 	}
-	
 }
