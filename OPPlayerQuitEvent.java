@@ -10,6 +10,13 @@ import dev.kilovice.opsecurity.main.OPSecurity;
 
 public class OPPlayerQuitEvent implements Listener{
 
+	private static OPSecurity plugin;
+	public OPPlayerQuitEvent(OPSecurity pl)
+	{
+		plugin = pl;
+		OPSecurity.registerEvents(plugin, this);
+	}
+	
 	@EventHandler
 	public void onQuit(PlayerQuitEvent e)
 	{
@@ -21,3 +28,4 @@ public class OPPlayerQuitEvent implements Listener{
 		}
 	}
 }
+
