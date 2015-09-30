@@ -1,6 +1,6 @@
 package dev.kilovice.opsecurity.main;
 
-import java.io.File;
+import java.io.File; 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,8 +13,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import dev.kilovice.mcstats.Metrics;
 
+import dev.kilovice.mcstats.Metrics;
+import dev.kilovice.opsecurity.commands.OPSecurityCommand;
 import dev.kilovice.opsecurity.listeners.OPAsyncChatEvent;
 import dev.kilovice.opsecurity.listeners.OPPlayerCommandPreprocessEvent;
 import dev.kilovice.opsecurity.listeners.OPPlayerQuitEvent;
@@ -28,6 +29,11 @@ public class OPSecurity extends JavaPlugin{
 	public static List<String> playersetpw;
 	public static HashMap<String, String> tempcmd;
 	
+	public OPSecurity()
+	{
+		super();
+	}
+	
 	@Override
 	public void onEnable(){
 		plugin = this;
@@ -38,9 +44,15 @@ public class OPSecurity extends JavaPlugin{
 		tempcmd = new HashMap<String, String>();
 		registerMessages();
 		OPDebug.log(this.getClass(), "Registering Events . . .");
-		registerEvents(this, new OPAsyncChatEvent(), new OPPlayerCommandPreprocessEvent(), new OPPlayerQuitEvent());
+		
+		new OPAsyncChatEvent(this);
+		new OPPlayerCommandPreprocessEvent(this);
+		new OPPlayerQuitEvent(this);
+		
+		new OPSecurityCommand(this);
+		
 		OPDebug.log(this.getClass(), "Checking if Plugin is Enabled . . .");
-		if(OPConfig.enabled)
+		if(OPConfig.PLUGIN)
 		{
 			OPDebug.log(this.getClass(), "OPSecurity is Enabled!");
 			OPDebug.log(this.getClass(), "Starting Scheduler.");
@@ -49,7 +61,7 @@ public class OPSecurity extends JavaPlugin{
 			if(!OPConfig.checkNull("config.metrics"))
 			{
 				OPDebug.log(this.getClass(), "Checking if Metrics is Enabled . . .");
-				if(!OPConfig.metrics)
+				if(!OPConfig.METRICS)
 				{
 					OPDebug.log(this.getClass(), "Metrics is Enabled!");
 				metricsStart();
@@ -82,7 +94,7 @@ public class OPSecurity extends JavaPlugin{
 	            OPDebug.log("OPSecurity", "Registering Event: '" + listener.getClass().getSimpleName() + "'");
 	        }
 	    }
-	   public static void registerMessages()
+	   public static synchronized void registerMessages()
 	   {
 			try{
 				File f = new File(OPSecurity.getInstance().getDataFolder().getAbsolutePath(), File.separator + "messages.yml");
@@ -97,6 +109,9 @@ public class OPSecurity extends JavaPlugin{
 					fc.set("messages.incorrect-password", "&c&lIncorrect Password! &7&lPlease try again!");
 					fc.set("messages.correct-password", "&a&lCorrect Password! &7&lInitiating Command!");
 					fc.set("messages.no-permission", "&c&oI'm sorry, but you do not have permission to do this!");
+					fc.set("messages.kick", "&c&oExcesive Permissions!");
+					fc.set("messages.permission-message", "&a&o%player% has been kicked!");
+					fc.set("messages.broadcast-message", "&c&o%player% has been kicked!");
 					fc.save(f);
 				}
 			}
@@ -118,7 +133,7 @@ public class OPSecurity extends JavaPlugin{
 	   {
 		   if(!OPConfig.checkNull("config.update-check"))
 		   {
-			if(OPConfig.updater)
+			if(OPConfig.UPDATE)
 			{
 			OPUpdater o = new OPUpdater(this);
 			o.checkForUpdate();
