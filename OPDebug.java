@@ -9,7 +9,7 @@ public class OPDebug {
 		}
 		if(!OPConfig.checkNull("config.debug"))
 		{
-		if(OPConfig.debug)
+		if(OPConfig.DEBUG)
 		{
 		OPSecurity.log.info(classname.getSimpleName() + ": " + s);
 	}
@@ -26,7 +26,7 @@ public class OPDebug {
 		}
 		if(!OPConfig.checkNull("config.debug"))
 		{
-		if(OPConfig.debug)
+		if(OPConfig.DEBUG)
 		{
 		OPSecurity.log.info(s1 + ": " + s);
 	}
