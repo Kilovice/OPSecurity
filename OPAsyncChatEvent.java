@@ -1,6 +1,6 @@
 package dev.kilovice.opsecurity.listeners;
 
-import net.md_5.bungee.api.ChatColor;  
+import net.md_5.bungee.api.ChatColor;   
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -15,6 +15,12 @@ import dev.kilovice.opsecurity.main.OPSecurity;
 
 public class OPAsyncChatEvent implements Listener{
 
+	private static OPSecurity plugin;
+	public OPAsyncChatEvent(OPSecurity pl)
+	{
+		plugin = pl;
+		OPSecurity.registerEvents(plugin, this);
+	}
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent e){
 		OPDebug.log(this.getClass(), "Event Fired.");
@@ -22,9 +28,9 @@ public class OPAsyncChatEvent implements Listener{
 		if(OPSecurity.pw.contains(p.getName()))
 		{
 		String tpw = e.getMessage();
-		String cpw = (String) OPConfig.plrpws.get(p.getName());
-		String gpw = OPConfig.globalpw;
-		String s = OPConfig.cmdtp;
+		String cpw = (String) OPConfig.PLAYER_PASSWORD.get(p.getName());
+		String gpw = OPConfig.GLOBAL_PASSWORD;
+		String s = OPConfig.COMMAND_TYPE;
 		e.setCancelled(true);
 		OPDebug.log(this.getClass(), "Checking Password type");
 		switch(s.toLowerCase())
@@ -34,12 +40,12 @@ public class OPAsyncChatEvent implements Listener{
 			if(tpw.equals(cpw))
 			{
 				OPDebug.log(this.getClass(), "Correct Password Entered");
-				p.sendMessage(ChatColor.translateAlternateColorCodes('&', OPMessages.ctpw));
+				p.sendMessage(ChatColor.translateAlternateColorCodes('&', OPMessages.CORRECT_PASSWORD));
 				execCmd(p);
 			}
 			else{
 				OPDebug.log(this.getClass(), "Incorrect Password Entered");
-				p.sendMessage(ChatColor.translateAlternateColorCodes('&', OPMessages.inctpw));
+				p.sendMessage(ChatColor.translateAlternateColorCodes('&', OPMessages.INCORRECT_PASSWORD));
 			}
 			break;
 			
@@ -48,12 +54,12 @@ public class OPAsyncChatEvent implements Listener{
 			if(tpw.equals(gpw))
 			{
 				OPDebug.log(this.getClass(), "Correct Password Entered");
-				p.sendMessage(ChatColor.translateAlternateColorCodes('&', OPMessages.ctpw));
+				p.sendMessage(ChatColor.translateAlternateColorCodes('&', OPMessages.CORRECT_PASSWORD));
 				execCmd(p);
 			}
 			else{
 				OPDebug.log(this.getClass(), "Incorrect Password Entered");
-				p.sendMessage(ChatColor.translateAlternateColorCodes('&', OPMessages.inctpw));
+				p.sendMessage(ChatColor.translateAlternateColorCodes('&', OPMessages.INCORRECT_PASSWORD));
 			}
 			break;
 		}
