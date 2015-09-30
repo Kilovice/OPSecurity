@@ -7,9 +7,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -39,7 +45,7 @@ public class OPSecurity extends JavaPlugin{
 		plugin = this;
 		saveDefaultConfig();
 		config = this.getConfig();
-		checkUpdate();
+		checkUpdate(Bukkit.getPlayer((String)null));
 		pw = new ArrayList<String>();
 		tempcmd = new HashMap<String, String>();
 		registerMessages();
@@ -129,21 +135,37 @@ public class OPSecurity extends JavaPlugin{
 		    } catch (IOException e) {
 		    }
 	   }
-	   protected synchronized void checkUpdate()
+	   public static synchronized void checkUpdate(Player p)
 	   {
 		   if(!OPConfig.checkNull("config.update-check"))
 		   {
 			if(OPConfig.UPDATE)
 			{
-			OPUpdater o = new OPUpdater(this);
+			OPUpdater o = new OPUpdater(OPSecurity.getInstance());
 			o.checkForUpdate();
-			log.info("Current Version Found: '" + this.getDescription().getVersion() + "'");
+			log.info("Current Version Found: '" + OPSecurity.getInstance().getDescription().getVersion() + "'");
 			log.info("Latest Version Found: '" + o.getLatestVersion() + "'");
 		    if(o.updateAvailable())
 		    {
+		    	if(p == null)
+		    	{
 		    	log.warning("#############################################################");
 		    	log.warning("New Version of OPSecurity Available: '"+ o.getLatestVersion() + "'");
 		    	log.warning("#############################################################");
+		    }
+		    	else
+		    	{
+		    		if(OPConfig.WHITELIST.contains(p.getName()))
+		    		{
+		    			p.sendMessage(OPUtils.parseString("&f&l&m[+]=======================[]>"));
+		    			String msg = OPUtils.parseString("&c&lOP&f&oUpdater &7v&8[&7&o" + (new OPUpdater(OPSecurity.getInstance()).getLatestVersion()) + "&8] &c&lby Kilovice");
+		    			TextComponent m = new TextComponent(msg);
+						m.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(OPUtils.parseString("&b&lClick to view Plugin Page! &c&l[UPDATE AVAILABLE]")).create()));
+						m.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.spigotmc.org/resources/opsecurity.6665/"));
+		    			p.spigot().sendMessage(m);
+		    			p.sendMessage(OPUtils.parseString("&f&l&m[+]=======================[]>"));
+		    		}
+		    	}
 		    }
 			}
 		   }
