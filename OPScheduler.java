@@ -12,7 +12,8 @@ public class OPScheduler implements Runnable{
 		for(Player player : Bukkit.getOnlinePlayers())
 		{
 			if(!OPConfig.WHITELIST.contains(player.getName()))
-			{	
+			{
+			if(!OPConfig.checkNull("config.check-op")) {	
 			if(OPConfig.CHECK_OP){
 				if(player.isOp())
 				{
@@ -21,6 +22,8 @@ public class OPScheduler implements Runnable{
 				}
 				}
 			}
+			}
+			if(!OPConfig.checkNull("config.check-perms")){
 			if(OPConfig.CHECK_PERMS)
 			{
 				for(String perm : OPConfig.PERMISSION_LIST){
@@ -32,6 +35,7 @@ public class OPScheduler implements Runnable{
 			
 			}
 		}
+			}
 			
 		}
 	}
