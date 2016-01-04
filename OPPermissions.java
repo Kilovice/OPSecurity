@@ -1,6 +1,6 @@
 package dev.kilovice.opsecurity.main;
 
-public class OPPermissions {
+public interface OPPermissions{
 
 	public static final String VIEW_BROADCAST = "opsecurity.ban.see";
 }
