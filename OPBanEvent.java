@@ -1,14 +1,12 @@
 package dev.kilovice.opsecurity.main;
 
-import net.md_5.bungee.api.ChatColor; 
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class OPBanEvent extends Event implements Cancellable{
+public class OPBanEvent extends Event implements Cancellable, OPMessages, OPPermissions{
 
 	private Boolean cancelled = false;
 	private static final HandlerList handlers = new HandlerList();
@@ -32,21 +30,21 @@ public class OPBanEvent extends Event implements Cancellable{
 		if(!OPConfig.checkNull("config.perm-msg")){
 			for(String msg : OPConfig.PERMISSION_MESSAGE_LIST){
 				for(Player all : Bukkit.getOnlinePlayers()){
-					if(all.hasPermission(OPPermissions.VIEW_BROADCAST))
-					all.sendMessage(OPUtils.parseString(OPMessages.BROADCAST_PERMISSION_MESSAGE, player));
+					if(all.hasPermission(VIEW_BROADCAST))
+					all.sendMessage(OPUtils.parseString(msg, player));
 				}
 		}
 		if(!OPConfig.checkNull("config.bc-msg")){
 			for(String msg : OPConfig.BROADCAST_MESSAGE_LIST){
 				for(Player all : Bukkit.getOnlinePlayers()){
-					all.sendMessage(OPUtils.parseString(OPMessages.BROADCAST_MESSAGE, player));
+					all.sendMessage(OPUtils.parseString(msg, player));
 				}
 			}
 		}
 		if(!OPConfig.checkNull("config.ban")){
 			if(OPConfig.PLAYER_BAN_NAME){
 				player.setBanned(true);
-					player.kickPlayer(OPUtils.parseString(OPMessages.KICK_MESSAGE, player));
+					player.kickPlayer(OPUtils.parseString(KICK_MESSAGE, player));
 				
 			}
 		}
