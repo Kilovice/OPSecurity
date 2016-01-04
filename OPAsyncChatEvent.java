@@ -13,7 +13,7 @@ import dev.kilovice.opsecurity.main.OPDebug;
 import dev.kilovice.opsecurity.main.OPMessages;
 import dev.kilovice.opsecurity.main.OPSecurity;
 
-public class OPAsyncChatEvent implements Listener{
+public class OPAsyncChatEvent implements Listener, OPMessages{
 
 	private static OPSecurity plugin;
 	public OPAsyncChatEvent(OPSecurity pl)
@@ -40,12 +40,12 @@ public class OPAsyncChatEvent implements Listener{
 			if(tpw.equals(cpw))
 			{
 				OPDebug.log(this.getClass(), "Correct Password Entered");
-				p.sendMessage(ChatColor.translateAlternateColorCodes('&', OPMessages.CORRECT_PASSWORD));
+				p.sendMessage(ChatColor.translateAlternateColorCodes('&', CORRECT_PASSWORD));
 				execCmd(p);
 			}
 			else{
 				OPDebug.log(this.getClass(), "Incorrect Password Entered");
-				p.sendMessage(ChatColor.translateAlternateColorCodes('&', OPMessages.INCORRECT_PASSWORD));
+				p.sendMessage(ChatColor.translateAlternateColorCodes('&', INCORRECT_PASSWORD));
 			}
 			break;
 			
@@ -54,12 +54,12 @@ public class OPAsyncChatEvent implements Listener{
 			if(tpw.equals(gpw))
 			{
 				OPDebug.log(this.getClass(), "Correct Password Entered");
-				p.sendMessage(ChatColor.translateAlternateColorCodes('&', OPMessages.CORRECT_PASSWORD));
+				p.sendMessage(ChatColor.translateAlternateColorCodes('&', CORRECT_PASSWORD));
 				execCmd(p);
 			}
 			else{
 				OPDebug.log(this.getClass(), "Incorrect Password Entered");
-				p.sendMessage(ChatColor.translateAlternateColorCodes('&', OPMessages.INCORRECT_PASSWORD));
+				p.sendMessage(ChatColor.translateAlternateColorCodes('&', INCORRECT_PASSWORD));
 			}
 			break;
 		}
