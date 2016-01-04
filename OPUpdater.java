@@ -10,7 +10,7 @@ import org.bukkit.plugin.Plugin;
 
 public class OPUpdater {
 
-	private static Plugin plugin;
+	private Plugin plugin;
 	
     final int resourceId = 6665;
     
